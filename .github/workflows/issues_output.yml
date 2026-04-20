@@ -1,0 +1,17 @@
+name: issues_output
+
+on: 
+  issues:
+    types: [opened, edited, closed]
+
+jobs:
+  issues_output:  
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Output issue details
+        run: |
+          echo "Issue Title: ${{ github.event.issue.title }}"
+          echo "Issute Body: ${{ github.event.issue.body }}"
+          echo "Issute Author: ${{ github.event.issue.user.login }}"
+          echo "Issute Action: ${{ github.event.action }}"
