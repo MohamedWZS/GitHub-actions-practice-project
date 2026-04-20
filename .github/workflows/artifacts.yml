@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get Code
+      - name: Get code
         uses: actions/checkout@v6
-      - name: Install Nodejs
+      - name: Install nodejs
         uses: actions/setup-node@v6
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
-      - name: Run Linter
+      - name: Run linter
         run: npm run lint
       - name: Run Tests
         run: npm run test
@@ -28,13 +28,13 @@ jobs:
     steps:
       - name: Get Code
         uses: actions/checkout@v6
-      - name: Install Nodejs
+      - name: Install nodejs
         uses: actions/setup-node@v6
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm ci
       - name: Build Website
         run: npm run build
-      - name: Upload Artifacts
+      - name: Upload artifacts # Artifact Upload
         uses: actions/upload-artifact@v7
         with:
           name: dist-files # giving my artifact a name to use later
@@ -42,10 +42,17 @@ jobs:
           # path: |
           #   dist
           #   package.json
+
   deploy:
-    needs: build
+    needs: build # NEEDED for specifying which job we will dowload which artifact from
     runs-on: ubuntu-latest
 
     steps:
+      - name: Get build artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: dist-files # specifying the artifact name from previous jobs
+      - name: Outuput contents
+        run: ls
       - name: Deploy
         run: echo "Deploying...."
