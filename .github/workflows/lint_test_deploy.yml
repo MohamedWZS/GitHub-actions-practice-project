@@ -1,7 +1,7 @@
 name: lint_test_deploy
 on: [push, workflow_dispatch]
 jobs:
-    test:
+    lint_test_deploy:
         runs-on: ubuntu-latest
         steps:
           - name: Get Code
