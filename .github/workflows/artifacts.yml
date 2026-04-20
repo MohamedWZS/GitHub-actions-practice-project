@@ -1,0 +1,50 @@
+name: artifacts_upload
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Code
+        run: actions/checkout@v6
+      - name: Install Nodejs
+        run: actions/setup-node@v6
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Linter
+        run: npm run lint
+      - name: Run Tests
+        run: npm run test
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Code
+        run: actions/checkout@v6
+      - name: Install Nodejs
+        run: actions/setup-node@v6
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build Website
+        run: npm run build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-files # giving my artifact a name to use later
+          path: |
+            dist
+            package.json
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        run: echo "Deploying...."
